@@ -1,0 +1,1757 @@
+#: import SlideTransition kivy.uix.screenmanager.SlideTransition
+
+<Content>:
+
+
+    Label: 
+        text: "Are you sure you want to Submit?"
+
+    MDFillRoundFlatButton:
+        text: "YES"
+        on_release: 
+            root.current = "submit"; app.calculate_score
+    
+            
+
+<DemoProject>:
+
+    Screen:
+        id: first
+        name: "screen_1"
+
+        MDIconButton:
+            id: theme_btn
+            icon: "icons/moon.png"
+            pos_hint: {"x": .1, "y": .9}
+            on_release:
+                if(app.theme_cls.theme_style == "Light"):\
+                app.theme_cls.theme_style = "Dark"; theme_btn.icon = "icons/sun1.png"
+                else:\
+                app.theme_cls.theme_style = "Light"; theme_btn.icon = "icons/moon.png"
+        
+
+        Image:
+            source: "icons/logo.png"
+            size_hint: (.2, .2)
+            pos_hint: {"center_x": 0.5, "center_y": 0.79}
+            halign: "center"
+
+        MDLabel:
+            text: "Q U I Z"
+            pos_hint: {"x": 0, "y": 0.15}
+            halign: "center"
+
+        MDTextField:
+            id: userID
+            hint_text: 'UserID'
+            pos_hint:  {"center_x": 0.5, "center_y": 0.5}
+            size_hint_x: None
+            width: 250
+
+        MDTextField:
+            id: password
+            hint_text: 'Password'
+            pos_hint:  {"center_x": 0.5, "center_y": 0.4}
+            password: True
+            size_hint_x: None
+            width: 250
+
+        Label:
+            id: error_msg
+            text: ""
+            font_size: 13
+            color: "red"
+            pos_hint: {"x": 0, "y": -0.2}
+            halign: "center"
+
+        MDRoundFlatButton:
+            text: "LogIn"
+            pos_hint: {"center_x": 0.5, "center_y": 0.22}
+            md_bg_color: app.theme_cls.primary_light
+            on_release: 
+                root.log_in(userID.text, password.text)
+                if(root.log_in(userID.text, password.text)):\
+                error_msg.text = ""; root.current = "screen_2"; root.transition.direction =  "left"
+                else:\
+                error_msg.text = "Invalid UserID/Password"
+
+        MDLabel:
+            text: "Don't have an account?"
+            font_size: 13
+            pos_hint: {"x": 0, "y": -0.35}
+            halign: "center"
+
+        MDFillRoundFlatButton:
+            text: "Sign Up"
+            pos_hint: {"center_x": 0.5, "center_y": 0.1}
+            md_bg_color: app.theme_cls.primary_dark
+            on_release: error_msg.text = ""; root.current = "sign_up"; root.transition.direction = "down"
+    
+    Screen:
+        name: "sign_up"
+
+        MDLabel:
+            text: "Sign Up"
+            pos_hint: {"x": 0, "y": 0.3}
+            halign: "center"
+
+        MDTextField:
+            id: firstName
+            hint_text: 'First Name'
+            pos_hint:  {"center_x": 0.5, "center_y": 0.7}
+            size_hint_x: None
+            width: 250
+        
+        MDTextField:
+            id: lastName
+            hint_text: 'Last Name'
+            pos_hint:  {"center_x": 0.5, "center_y": 0.6}
+            size_hint_x: None
+            width: 250
+
+        MDTextField:
+            id: email
+            hint_text: 'Email'
+            pos_hint:  {"center_x": 0.5, "center_y": 0.5}
+            size_hint_x: None
+            width: 250
+
+        MDTextField:
+            id: user_password
+            hint_text: 'Password'
+            pos_hint:  {"center_x": 0.5, "center_y": 0.4}
+            size_hint_x: None
+            width: 250
+            password: True
+        
+        MDTextField:
+            id: phoneNumber
+            hint_text: 'Phone Number (+234)'
+            pos_hint:  {"center_x": 0.5, "center_y": 0.3}
+            size_hint_x: None
+            width: 250
+
+        MDRoundFlatButton:
+            text: "Cancel"
+            pos_hint: {"center_x": 0.3, "center_y": 0.12}
+            md_bg_color: app.theme_cls.primary_light
+            on_release:
+                root.current = "screen_1"
+                root.transition.direction = "up"
+
+        MDFillRoundFlatButton:
+            text: "Sign Up"
+            pos_hint: {"center_x": 0.7, "center_y": 0.12}
+            md_bg_color: app.theme_cls.primary_dark
+            on_release:
+                root.sign_up(firstName.text, lastName.text, email.text, user_password.text, phoneNumber.text, app)
+
+        Label:
+            id: sign_err
+            text: ""
+            font_size: 13
+            pos_hint: {"x": 0, "y": -0.3}
+            halign: "center"
+            color: "red"
+    
+
+    Screen:
+        name: "screen_2"
+        
+        MDIconButton:
+            icon: "icons/back.png"
+            pos_hint: {"x": .1, "y": .9}
+            on_release:
+                root.current = "screen_1"
+                root.transition.direction =  "right"
+
+        MDLabel:
+            id: greets
+            text: ""
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            font_size: 17
+
+        MDLabel:
+            text: "Please select a Category"
+            pos_hint: {"x": 0, "y": 0.35}
+            halign: "center"
+            font_size: 13
+
+        MDRoundFlatButton:
+            text: "arts_and_literature"
+            pos_hint: {"center_x": 0.5, "center_y": 0.75}
+            on_release:
+                root.cat_clicked(self.text, app, root)
+                if(root.cat_clicked(self.text, app, root)):\
+                root.current = "Instructions"; root.transition.direction =  "left"
+                else:\
+                app.show_connection_dialog()
+
+        MDRoundFlatButton:
+            text: "film_and_tv"
+            pos_hint: {"center_x": 0.5, "center_y": 0.67}
+            on_release:
+                root.cat_clicked(self.text, app, root)
+                if(root.cat_clicked(self.text, app, root)):\
+                root.current = "Instructions"; root.transition.direction =  "left"
+                else:\
+                app.show_connection_dialog()
+                
+        
+        MDRoundFlatButton:
+            text: "food_and_drink"
+            pos_hint: {"center_x": 0.5, "center_y": 0.59}
+            on_release:
+                root.cat_clicked(self.text, app, root)
+                if(root.cat_clicked(self.text, app, root)):\
+                root.current = "Instructions"; root.transition.direction =  "left"
+                else:\
+                app.show_connection_dialog()
+        
+        
+
+
+        MDRoundFlatButton:
+            text: "general_knowledge"
+            pos_hint: {"center_x": 0.5, "center_y": 0.51}
+            on_release:
+                root.cat_clicked(self.text, app, root)
+                if(root.cat_clicked(self.text, app, root)):\
+                root.current = "Instructions"; root.transition.direction =  "left"
+                else:\
+                app.show_connection_dialog()
+
+        MDRoundFlatButton:
+            text: "geography"
+            pos_hint: {"center_x": 0.5, "center_y": 0.43}
+            on_release:
+                root.cat_clicked(self.text, app, root)
+                if(root.cat_clicked(self.text, app, root)):\
+                root.current = "Instructions"; root.transition.direction =  "left"
+                else:\
+                app.show_connection_dialog()
+
+        MDRoundFlatButton:
+            text: "history"
+            pos_hint: {"center_x": 0.5, "center_y": 0.35}
+            on_release:
+                root.cat_clicked(self.text, app, root)
+                if(root.cat_clicked(self.text, app, root)):\
+                root.current = "Instructions"; root.transition.direction =  "left"
+                else:\
+                app.show_connection_dialog()
+                
+        MDRoundFlatButton:
+            text: "music"
+            pos_hint: {"center_x": 0.5, "center_y": 0.27}
+            on_release:
+                root.cat_clicked(self.text, app, root)
+                if(root.cat_clicked(self.text, app, root)):\
+                root.current = "Instructions"; root.transition.direction =  "left"
+                else:\
+                app.show_connection_dialog()
+
+        MDRoundFlatButton:
+            text: "science"
+            pos_hint: {"center_x": 0.5, "center_y": 0.19} 
+            on_release:
+                root.cat_clicked(self.text, app, root)
+                if(root.cat_clicked(self.text, app, root)):\
+                root.current = "Instructions"; root.transition.direction =  "left"
+                else:\
+                app.show_connection_dialog()
+                
+        
+        MDRoundFlatButton:
+            text: "sport_and_leisure"
+            pos_hint: {"center_x": 0.5, "center_y": 0.11}
+            on_release:
+                root.cat_clicked(self.text, app, root)
+                if(root.cat_clicked(self.text, app, root)):\
+                root.current = "Instructions"; root.transition.direction =  "left"
+                else:\
+                app.show_connection_dialog()
+        
+                
+        
+        MDSpinner:
+            id: loading
+            size_hint: None, None
+            size: dp(46), dp(46)
+            pos_hint: {'center_x': .5, 'center_y': .1}
+            active: False
+            palette:
+                [0.28627450980392155, 0.8431372549019608, 0.596078431372549, 1],             [0.3568627450980392, 0.3215686274509804, 0.8666666666666667, 1],             [0.8862745098039215, 0.36470588235294116, 0.592156862745098, 1],             [0.8784313725490196, 0.9058823529411765, 0.40784313725490196, 1],
+        
+    Screen:
+        name: "loading_ques"
+
+        MDSpinner:
+            size_hint: None, None
+            size: dp(46), dp(46)
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            # determinate: True
+            active: True 
+
+    Screen:
+        name: "Instructions"       
+
+        MDIconButton:
+            icon: "icons/back.png"
+            pos_hint: {"x": .1, "y": .9}
+            on_release:
+                root.current = "screen_2"
+                root.transition.direction =  "right"
+
+        MDLabel:
+            text: "Instructions"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            font_size: 17
+            
+        MDLabel:
+            text: "1. Total time awarded is 10 minutes"
+            pos_hint: {"x": .15, "y": 0.25}
+            # halign: "center"
+            font_size: 13
+          
+        MDLabel:
+            text: "2. Once the time elapses, the quiz submits\nautomatically"
+            pos_hint: {"x": .15, "y": 0.15}
+            font_size: 13
+        
+        MDLabel:
+            text: "3. There are 10 questions in total"
+            pos_hint: {"x": .15, "y": 0.05}
+            font_size: 13
+        
+        MDLabel:
+            text: "4. Each question is awarded 1 mark"
+            pos_hint: {"x": .15, "y": -0.05}
+            font_size: 13
+        
+        
+        
+        MDFillRoundFlatButton:
+            text: "Start"
+            pos_hint: {"center_x": 0.5, "center_y": 0.18} 
+            on_release:
+                root.start_timer()
+                root.current = "question1";
+                root.transition.direction =  "left";
+                
+                
+                
+
+        
+
+    Screen:
+        name: "question1"
+        
+        Image:
+            id: img1
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+        
+        MDLabel:
+            id: time1
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "1/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+            MDLabel:
+                id: que1
+                text: "Question1's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que1_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que1_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que1_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que1_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que1_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que1_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que1_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que1_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Next"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .7, "y": .1}
+            on_release:
+                root.current = "question2"
+                root.transition.direction = "left"
+
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+
+
+
+    Screen:
+        name: "question2"
+        
+        Image:
+            id: img2
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+        
+        MDLabel:
+            id: time2
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "2/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+
+            MDLabel:
+                id: que2
+                text: "Question2's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que2_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que2_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que2_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que2_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que2_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que2_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que2_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que2_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Previous"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .1, "y": .1}
+            on_release:
+                root.current = "question1"
+                root.transition.direction = "right"
+
+        MDRoundFlatButton:
+            text: "Next"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .7, "y": .1}
+            on_release:
+                root.current = "question3"
+                root.transition.direction = "left"
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+    
+
+    Screen:
+        name: "question3"
+        
+        Image:
+            id: img3
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+        
+        MDLabel:
+            id: time3
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "3/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+            
+            MDLabel:
+                id: que3
+                text: "Question3's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que2_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que3_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que3_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que3_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que3_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que3_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que3_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que3_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Previous"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .1, "y": .1}
+            on_release:
+                root.current = "question2"
+                root.transition.direction = "right"
+
+        MDRoundFlatButton:
+            text: "Next"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .7, "y": .1}
+            on_release:
+                root.current = "question4"
+                root.transition.direction = "left"
+
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+
+    
+
+    Screen:
+        name: "question4"
+        
+        Image:
+            id: img4
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+        
+        MDLabel:
+            id: time4
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "4/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+            
+            MDLabel:
+                id: que4
+                text: "Question4's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que4_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que4_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que4_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que4_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que4_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que4_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que4_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que4_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Previous"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .1, "y": .1}
+            on_release:
+                root.current = "question3"
+                root.transition.direction = "right"
+
+        MDRoundFlatButton:
+            text: "Next"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .7, "y": .1}
+            on_release:
+                root.current = "question5"
+                root.transition.direction = "left"
+
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+        
+
+    Screen:
+        name: "question5"
+        
+        Image:
+            id: img5
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+        
+        
+        MDLabel:
+            id: time5
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "5/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+            
+            MDLabel:
+                id: que5
+                text: "Question5's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que5_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que5_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que5_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que5_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que5_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que5_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que5_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que5_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Previous"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .1, "y": .1}
+            on_release:
+                root.current = "question4"
+                root.transition.direction = "right"
+
+        MDRoundFlatButton:
+            text: "Next"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .7, "y": .1}
+            on_release:
+                root.current = "question6"
+                root.transition.direction = "left"
+
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+    
+
+
+    Screen:
+        name: "question6"
+        
+        Image:
+            id: img6
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+        
+        MDLabel:
+            id: time6
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "6/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+            
+            MDLabel:
+                id: que6
+                text: "Question6's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que6_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que6_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que6_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que6_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que6_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que6_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que6_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que6_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Previous"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .1, "y": .1}
+            on_release:
+                root.current = "question5"
+                root.transition.direction = "right"
+
+        MDRoundFlatButton:
+            text: "Next"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .7, "y": .1}
+            on_release:
+                root.current = "question7"
+                root.transition.direction = "left"
+
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+
+        
+    
+    Screen:
+        name: "question7"
+        
+        Image:
+            id: img7
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+            
+        
+        MDLabel:
+            id: time7
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "7/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+            
+            MDLabel:
+                id: que7
+                text: "Question7's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que7_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que7_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que7_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que7_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que7_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que7_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que7_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que7_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Previous"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .1, "y": .1}
+            on_release:
+                root.current = "question6"
+                root.transition.direction = "right"
+
+        MDRoundFlatButton:
+            text: "Next"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .7, "y": .1}
+            on_release:
+                root.current = "question8"
+                root.transition.direction = "left"
+
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+
+    
+    
+    Screen:
+        name: "question8"
+        
+        Image:
+            id: img8
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+        
+        MDLabel:
+            id: time8
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "8/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+            
+            MDLabel:
+                id: que8
+                text: "Question8's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que8_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que8_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que8_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que8_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que8_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que8_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que8_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que8_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Previous"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .1, "y": .1}
+            on_release:
+                root.current = "question7"
+                root.transition.direction = "right"
+
+        MDRoundFlatButton:
+            text: "Next"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .7, "y": .1}
+            on_release:
+                root.current = "question9"
+                root.transition.direction = "left"
+
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+    
+    
+    Screen:
+        name: "question9"
+        
+        Image:
+            id: img9
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+        
+        MDLabel:
+            id: time9
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "9/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+            
+            MDLabel:
+                id: que9
+                text: "Question9's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que9_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que9_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que9_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que9_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que9_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que9_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que9_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que9_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Previous"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .1, "y": .1}
+            on_release:
+                root.current = "question8"
+                root.transition.direction = "right"
+
+        MDRoundFlatButton:
+            text: "Next"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .7, "y": .1}
+            on_release:
+                root.current = "question10"
+                root.transition.direction = "left"
+
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+    
+
+    Screen:
+        name: "question10"
+        
+        Image:
+            id: img10
+            source: ""
+            pos_hint: {"x": 0.08, "y": 0.79}
+            size_hint: .24, .24
+        
+        MDLabel:
+            id: time10
+            text: '10:00'
+            pos_hint: {"x": 0, "y": 0.45}
+            halign: "center"
+            font_size: 14
+
+        Label:
+            text:  "10/10"
+            pos_hint: {"x": 0, "y": 0.4}
+            halign: "center"
+            color: "blue"
+            font_size: 13
+        
+        BoxLayout:
+            padding: [50, 0]
+            
+            MDLabel:
+                id: que10
+                text: "Question10's question"
+                font_size: 13
+                pos_hint: {"x": 0, "y": .3}
+
+        MDGridLayout:
+            pos_hint: {"center_x": .52, "center_y": 0.2}
+            cols: 2
+            row_force_default: True
+            row_default_height: 70
+
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que10_opt1.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que10_opt1
+                    multiline: True
+                    text: "option1"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que10_opt2.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que10_opt2
+                    multiline: True
+                    text: "option2"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que10_opt3.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+                
+                
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que10_opt3
+                    multiline: True
+                    text: "option3"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+            
+            MDCheckbox:
+                on_active: root.checkbox_click(self, self.active, root, que10_opt4.text)
+                size_hint_x: None
+                width: 100
+                group: "options"
+            
+            BoxLayout:
+                padding: [5, 0]
+                MDLabel: 
+                    id: que10_opt4
+                    multiline: True
+                    text: "option4"
+                    font_size: 13
+                    text_size: self.size
+                    halign: "left"
+                    valign: "middle"
+                
+            
+            
+        
+
+        MDRoundFlatButton:
+            text: "Previous"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"x": .1, "y": .1}
+            on_release:
+                root.current = "question9"
+                root.transition.direction = "right"
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .52, "y": .1}
+            on_release:
+                root.submit()
+                
+        
+        
+        
+    
+    Screen:
+        name: "submit"
+
+        MDLabel:
+            id: submit
+            text: "Submitted Sucessfully!"
+            halign: "center"
+            pos_hint: {"center_x": .5, "y": .2}
+            
+        MDLabel:
+            text: "Your result will be sent to you shortly\nvia sms"
+            halign: "center"
+            pos_hint: {"center_x": .5, "y": .1}
+            font_size: 13
+
+        MDRoundFlatButton:
+            text: "Log Out"
+            md_bg_color: app.theme_cls.primary_dark
+            pos_hint: {"center_x": .5, "y": .4}
+            on_release:
+                root.log_out(root)
+                
+        MDFillRoundFlatButton:
+            text: 'Check results'
+            pos_hint: {"center_x": .5, "y": .3}
+            on_release:
+                root.show_result_dialog
